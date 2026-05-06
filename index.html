@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A&R Listening Plan</title>
+  <style>
+    :root {
+      --bg: #f4f1ec;
+      --ink: #171716;
+      --muted: #706b63;
+      --panel: #fffdf8;
+      --line: #ddd4c8;
+      --accent: #cf3f34;
+      --accent-dark: #9f2e27;
+      --mint: #2c8578;
+      --blue: #315d92;
+      --gold: #b7791f;
+      --soft: #f8eadf;
+      --shadow: 0 20px 54px rgba(37, 30, 20, .11);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(49,93,146,.08) 0 1px, transparent 1px 80px),
+        linear-gradient(0deg, rgba(49,93,146,.07) 0 1px, transparent 1px 80px),
+        var(--bg);
+      letter-spacing: 0;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    .app {
+      width: min(1420px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    header {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fffdf8;
+      display: grid;
+      place-items: center;
+      box-shadow: 5px 5px 0 var(--ink);
+      flex: 0 0 auto;
+    }
+
+    .mark svg { width: 29px; height: 29px; stroke-width: 2.1; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 54px);
+      line-height: .92;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .brand p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 660px;
+    }
+
+    .header-chip {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 12px 14px;
+      min-width: 182px;
+    }
+
+    .header-chip span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .header-chip strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .controls {
+      position: sticky;
+      top: 18px;
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .field { display: grid; gap: 7px; }
+
+    label, .label {
+      font-weight: 850;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #2b2925;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      color: var(--ink);
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    textarea:focus, input:focus, select:focus {
+      box-shadow: 0 0 0 3px rgba(207,63,52,.22);
+    }
+
+    .platforms {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .check {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      min-height: 42px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      padding: 0;
+      flex: 0 0 auto;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 48px;
+      gap: 9px;
+    }
+
+    .btn {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      min-height: 48px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      color: var(--ink);
+      background: #fffaf1;
+      font-weight: 900;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .btn:hover { transform: translate(1px, 1px); box-shadow: 3px 3px 0 var(--ink); }
+    .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+    .btn.primary { background: var(--accent); color: #fffdf8; }
+    .btn.icon { padding: 0; }
+    .btn svg { width: 19px; height: 19px; stroke-width: 2.2; }
+
+    .taste-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-height: 34px;
+    }
+
+    .tag {
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 5px 8px;
+      background: var(--soft);
+      color: #423327;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .output {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .song-finder {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      background:
+        linear-gradient(135deg, rgba(207,63,52,.12), transparent 46%),
+        var(--panel);
+    }
+
+    .song-search {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      gap: 10px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .result-card {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      min-height: 136px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .result-card:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .result-card strong {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .result-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .result-card code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--accent-dark);
+      overflow-wrap: anywhere;
+      background: var(--soft);
+      padding: 7px;
+      border-radius: 6px;
+    }
+
+    .youtube-preview {
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #111;
+      aspect-ratio: 16 / 9;
+      display: none;
+    }
+
+    .youtube-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      padding: 14px;
+      min-height: 96px;
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .metric:nth-child(2) { background: #edf6f4; }
+    .metric:nth-child(3) { background: #eef3fa; }
+    .metric:nth-child(4) { background: #fff4df; }
+
+    .comfort {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .playlist {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      min-height: 178px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 2px solid var(--ink);
+      padding: 16px 16px 13px;
+    }
+
+    .section-title h2, .playlist h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .section-title p, .playlist p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .badge {
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: #fffaf1;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .link-row a {
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: #fffaf1;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .weeks {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .week {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 14px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius);
+      background: #fffaf1;
+      overflow: hidden;
+    }
+
+    .week-label {
+      background: var(--ink);
+      color: #fffdf8;
+      padding: 14px;
+      display: grid;
+      align-content: space-between;
+      gap: 20px;
+      min-height: 100%;
+    }
+
+    .week-label span {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #f8d1ca;
+    }
+
+    .week-label strong {
+      font-size: 34px;
+      line-height: .9;
+    }
+
+    .artists {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 12px 12px 12px 0;
+    }
+
+    .artist {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 13px;
+      min-height: 222px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .artist-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .artist h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.12;
+    }
+
+    .platform-dot {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fffdf8;
+      background: var(--mint);
+      flex: 0 0 auto;
+    }
+
+    .artist:nth-child(2) .platform-dot { background: var(--blue); }
+    .artist:nth-child(3) .platform-dot { background: var(--gold); }
+    .platform-dot svg { width: 16px; height: 16px; stroke-width: 2.3; }
+
+    .artist p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.42;
+      font-size: 13px;
+    }
+
+    .search-term {
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      padding: 8px 9px;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .feedback {
+      padding: 17px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      background: var(--ink);
+      color: #fffdf8;
+    }
+
+    .feedback h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .feedback p {
+      margin: 6px 0 0;
+      color: #ded6ca;
+      line-height: 1.45;
+    }
+
+    .feedback .btn {
+      background: var(--accent);
+      color: #fffdf8;
+      border-color: #fffdf8;
+      box-shadow: 4px 4px 0 #fffdf8;
+      white-space: nowrap;
+    }
+
+    .empty {
+      padding: 28px;
+      text-align: center;
+      display: none;
+    }
+
+    .empty h2 { margin: 0; font-size: 28px; }
+    .empty p { margin: 10px auto 0; max-width: 560px; color: var(--muted); line-height: 1.5; }
+
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 1fr; }
+      .controls { position: static; }
+      .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 880px) {
+      header { align-items: stretch; flex-direction: column; padding-bottom: 16px; }
+      .header-chip { width: 100%; }
+      .comfort, .artists { grid-template-columns: 1fr; }
+      .song-search, .results-grid { grid-template-columns: 1fr; }
+      .week { grid-template-columns: 1fr; }
+      .week-label { min-height: auto; grid-template-columns: 1fr auto; align-items: end; }
+      .artists { padding: 0 12px 12px; }
+      .feedback { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .app { width: min(100% - 20px, 1420px); padding-top: 12px; }
+      .mark { width: 46px; height: 46px; box-shadow: 3px 3px 0 var(--ink); }
+      .brand { align-items: flex-start; }
+      .brand p { font-size: 13px; }
+      .controls, .weeks, .playlist, .metric, .feedback { padding: 12px; }
+      .platforms, .toolbar { grid-template-columns: 1fr; }
+      .section-title { flex-direction: column; padding: 13px; }
+      .actions { grid-template-columns: 1fr 46px; }
+      .artist { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+        </div>
+        <div>
+          <h1>Personal A&R</h1>
+          <p>Turn your current favorites into a 4-week discovery plan across YouTube, SoundCloud, Bandcamp, and internet radio.</p>
+        </div>
+      </div>
+      <div class="header-chip">
+        <span>Current run</span>
+        <strong id="runLabel">4 weeks</strong>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel controls">
+        <div class="field">
+          <label for="tasteInput">Artists, genres, vibes you love</label>
+          <textarea id="tasteInput" placeholder="Example: Kaytranada, Sade, Fred again.., late-night R&B, warm house, dusty soul, emotional synths">Kaytranada, Sade, Fred again.., The Internet, late-night R&B, warm house, dusty soul, emotional synths</textarea>
+        </div>
+
+        <div class="field">
+          <label for="moodInput">Discovery mood</label>
+          <select id="moodInput">
+            <option value="balanced">Balanced: familiar but fresh</option>
+            <option value="underground">More underground and weird</option>
+            <option value="soft">Softer, comfort-heavy</option>
+            <option value="dance">Dancefloor and high-energy</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="label">Platforms allowed</div>
+          <div class="platforms">
+            <label class="check"><input type="checkbox" value="YouTube" checked /> YouTube</label>
+            <label class="check"><input type="checkbox" value="SoundCloud" checked /> SoundCloud</label>
+            <label class="check"><input type="checkbox" value="Bandcamp" checked /> Bandcamp</label>
+            <label class="check"><input type="checkbox" value="Internet radio" checked /> Internet radio</label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="generateBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7Z"/></svg>
+            Build plan
+          </button>
+          <button class="btn icon" id="copyBtn" title="Copy plan" aria-label="Copy plan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="9" y="9" width="13" height="13" rx="2"/><rect x="2" y="2" width="13" height="13" rx="2"/></svg>
+          </button>
+        </div>
+
+        <div class="field">
+          <div class="label">Taste map</div>
+          <div class="taste-tags" id="tasteTags"></div>
+        </div>
+      </aside>
+
+      <section class="output" id="output">
+        <section class="panel song-finder">
+          <div class="section-title" style="padding:0 0 13px;border-bottom:2px solid var(--ink);">
+            <div>
+              <h2>Find a song</h2>
+              <p>Type a song title or artist + song. The app builds direct search routes for every allowed platform.</p>
+            </div>
+            <span class="badge">Track pull</span>
+          </div>
+          <div class="song-search">
+            <input id="songInput" placeholder="Example: Sade No Ordinary Love" />
+            <button class="btn primary" id="songBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              Search
+            </button>
+          </div>
+          <div class="results-grid" id="songResults"></div>
+          <div class="youtube-preview" id="youtubePreview">
+            <iframe id="youtubeFrame" title="YouTube search preview" allowfullscreen></iframe>
+          </div>
+        </section>
+
+        <div class="toolbar">
+          <article class="panel metric"><span>New artists</span><strong>12</strong></article>
+          <article class="panel metric"><span>Comfort playlists</span><strong>2</strong></article>
+          <article class="panel metric"><span>Platforms</span><strong id="platformCount">4</strong></article>
+          <article class="panel metric"><span>Cadence</span><strong>3 / wk</strong></article>
+        </div>
+
+        <div class="comfort" id="comfortPlaylists"></div>
+
+        <section class="panel">
+          <div class="section-title">
+            <div>
+              <h2>4-week listening plan</h2>
+              <p>Each week gives you three new artists, a search path, and why the pick fits your taste.</p>
+            </div>
+            <span class="badge" id="modeBadge">Balanced route</span>
+          </div>
+          <div class="weeks" id="weeks"></div>
+        </section>
+
+        <section class="panel feedback">
+          <div>
+            <h2>Tell me what hit and what missed.</h2>
+            <p>After week one, send back your favorite artist, least favorite artist, and one song you replayed. I will refine next week's plan around that feedback.</p>
+          </div>
+          <button class="btn" id="feedbackBtn">Copy feedback prompt</button>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const artistPool = {
+      balanced: [
+        ["Channel Tres", "Compton house, velvet vocals, and basslines that sit between Kaytranada bounce and late-night club minimalism."],
+        ["Liv.e", "Loose neo-soul with smudged edges, perfect if you like warm vocals that feel personal without becoming too polished."],
+        ["TSHA", "Melodic house with emotional lift, good for Fred again.. fans who want something cleaner and more DJ-friendly."],
+        ["Yazmin Lacey", "Smoky UK soul with jazz pressure, a natural bridge from Sade into newer late-night songwriting."],
+        ["Jim Legxacy", "Restless UK alt-R&B and rap fragments, great when you want melody, texture, and a little chaos."],
+        ["Kelela", "Sleek electronic R&B with club architecture, ideal for the future-facing side of your taste."],
+        ["Jitwam", "Dusty, global, sample-warm grooves that live between house, soul, and handmade funk."],
+        ["Ego Ella May", "Soft-focus London soul, intimate enough for headphones and polished enough for repeat listens."],
+        ["Rochelle Jordan", "R&B vocals over high-gloss dance production, a strong pick for The Internet plus house energy."],
+        ["Demae", "Tender neo-soul with off-kilter production, good for slow mornings and low-light rooms."],
+        ["O'Flynn", "Percussive electronic music with organic samples and enough groove to keep it human."],
+        ["Charlotte Dos Santos", "Elegant soul with jazz and Brazilian color, a refined comfort-zone expansion."]
+      ],
+      underground: [
+        ["Liv.e", "Warped soul sketches and nonlinear vocals for when polished R&B feels too predictable."],
+        ["Nala Sinephro", "Ambient jazz with deep patience, useful when your taste wants space instead of hooks."],
+        ["John Glacier", "Murmured alt-rap with icy production and a private, nocturnal feeling."],
+        ["Klein", "Fragmented experimental R&B and collage logic, challenging but emotionally sticky."],
+        ["Loraine James", "Left-field electronics with tenderness under the machine surface."],
+        ["Tirzah", "Minimal, intimate pop that sounds unfinished in the best possible way."],
+        ["ML Buch", "Guitar haze, digital edges, and dream-pop structures bent out of shape."],
+        ["Space Afrika", "Ambient, dub, and urban texture for night-bus listening."],
+        ["Duval Timothy", "Piano-led modern composition with soft electronic fingerprints."],
+        ["Nourished by Time", "Strange bedroom funk and heartfelt pop from a future-adjacent timeline."],
+        ["Yaeji", "Whispered club-pop that balances sweetness with odd angles."],
+        ["James K", "Dreamy electronic songwriting with a blurred, underground glow."]
+      ],
+      soft: [
+        ["Yazmin Lacey", "Gentle jazz-soul phrasing with enough groove to avoid background-music blur."],
+        ["Charlotte Dos Santos", "A graceful step from Sade into orchestral, modern soul warmth."],
+        ["Ego Ella May", "Soft London vocals and relaxed drums for repeatable comfort listening."],
+        ["Cleo Sol", "Patient, healing soul that works when you want calm without losing depth."],
+        ["Lianne La Havas", "Guitar-led soul with rich vocals and emotional clarity."],
+        ["Sault", "Spiritual soul, funk, and quiet protest energy with beautiful restraint."],
+        ["Demae", "Close-mic neo-soul that feels like a voice note from a talented friend."],
+        ["Mereba", "Folk-soul warmth and intimate writing, very easy to live with for a week."],
+        ["Nick Hakim", "Hazy soul textures with a romantic, analog mood."],
+        ["Pip Millett", "Clean UK soul vocals with low-lit production."],
+        ["Kadhja Bonet", "Elegant psychedelic soul with cinematic arrangements."],
+        ["Raveena", "Airy R&B and soft-focus melodies that feel lush without becoming heavy."]
+      ],
+      dance: [
+        ["Channel Tres", "Deep voice, lean house drums, and immediate movement without losing cool."],
+        ["TSHA", "Bright emotional house for fans of festival feeling without the obvious drops."],
+        ["Rochelle Jordan", "R&B hooks snapped onto sleek club production."],
+        ["Jayda G", "Joyful house records with disco lift and real personality."],
+        ["Eliza Rose", "UK garage and house energy with vocal hooks that land fast."],
+        ["Logic1000", "Soft-edged club tracks that stay warm and functional."],
+        ["O'Flynn", "Percussion-led electronic tracks that make a room feel alive."],
+        [" salute", "Colorful, high-gloss dance music with emotional chord work."],
+        ["Sherelle", "Fast, kinetic footwork and jungle energy for peak-hour discovery."],
+        ["India Jordan", "Big-hearted club music with motion and melody."],
+        ["HAAi", "Psychedelic techno and breakbeat pressure with strong world-building."],
+        ["Anz", "UK club hybridity: garage, electro, bass, and bright melodic instincts."]
+      ]
+    };
+
+    const platformUrls = {
+      "YouTube": "https://www.youtube.com/results?search_query=",
+      "SoundCloud": "https://soundcloud.com/search?q=",
+      "Bandcamp": "https://bandcamp.com/search?q=",
+      "Internet radio": "https://www.nts.live/search?q="
+    };
+
+    const tasteInput = document.getElementById("tasteInput");
+    const moodInput = document.getElementById("moodInput");
+    const weeksEl = document.getElementById("weeks");
+    const tagsEl = document.getElementById("tasteTags");
+    const comfortEl = document.getElementById("comfortPlaylists");
+    const platformCountEl = document.getElementById("platformCount");
+    const modeBadge = document.getElementById("modeBadge");
+    const songInput = document.getElementById("songInput");
+    const songResults = document.getElementById("songResults");
+    const youtubePreview = document.getElementById("youtubePreview");
+    const youtubeFrame = document.getElementById("youtubeFrame");
+
+    const songPlatforms = [
+      {
+        name: "YouTube",
+        url: query => `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
+        preview: query => `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}`,
+        note: "Best first stop for official videos, lyric videos, live takes, and playlists."
+      },
+      {
+        name: "SoundCloud",
+        url: query => `https://soundcloud.com/search/sounds?q=${encodeURIComponent(query)}`,
+        note: "Good for remixes, edits, demos, DJ uploads, and early underground versions."
+      },
+      {
+        name: "Bandcamp",
+        url: query => `https://bandcamp.com/search?q=${encodeURIComponent(query)}`,
+        note: "Best for buying, finding independent releases, and checking label catalogs."
+      },
+      {
+        name: "Internet radio",
+        url: query => `https://www.nts.live/search?q=${encodeURIComponent(query)}`,
+        note: "Search NTS for radio shows, guest mixes, and context around the track."
+      }
+    ];
+
+    function selectedPlatforms() {
+      return [...document.querySelectorAll(".platforms input:checked")].map(input => input.value);
+    }
+
+    function tasteTerms() {
+      return tasteInput.value
+        .split(/,|\n/)
+        .map(item => item.trim())
+        .filter(Boolean)
+        .slice(0, 10);
+    }
+
+    function makeLinks(query, platforms) {
+      return platforms.map(platform => {
+        const url = platformUrls[platform] + encodeURIComponent(query);
+        return `<a href="${url}" target="_blank" rel="noreferrer">${platform}</a>`;
+      }).join("");
+    }
+
+    function renderSongSearch() {
+      const query = songInput.value.trim();
+      if (!query) {
+        songResults.innerHTML = songPlatforms.map(platform => `
+          <div class="result-card">
+            <strong>${platform.name}</strong>
+            <span>Enter a song name to generate a direct search route.</span>
+            <code>Waiting for track...</code>
+          </div>
+        `).join("");
+        youtubePreview.style.display = "none";
+        youtubeFrame.removeAttribute("src");
+        return;
+      }
+
+      songResults.innerHTML = songPlatforms.map(platform => {
+        const url = platform.url(query);
+        return `
+          <a class="result-card" href="${url}" target="_blank" rel="noreferrer">
+            <strong>${platform.name}<span>Open</span></strong>
+            <span>${platform.note}</span>
+            <code>${query}</code>
+          </a>
+        `;
+      }).join("");
+
+      youtubeFrame.src = songPlatforms[0].preview(query);
+      youtubePreview.style.display = "block";
+    }
+
+    function renderTags() {
+      const terms = tasteTerms();
+      tagsEl.innerHTML = terms.length
+        ? terms.map(term => `<span class="tag">${term}</span>`).join("")
+        : `<span class="tag">Add your taste above</span>`;
+    }
+
+    function renderComfort(platforms) {
+      const terms = tasteTerms();
+      const primary = terms.slice(0, 4).join(" ");
+      const secondary = terms.slice(4, 8).join(" ") || terms.slice(0, 3).join(" ");
+      const playlists = [
+        {
+          title: "Comfort playlist 01: same-room favorites",
+          note: "Built to feel close to your current rotation: familiar voices, similar tempos, and low-friction replay value.",
+          query: `${primary} playlist similar artists`
+        },
+        {
+          title: "Comfort playlist 02: adjacent mood board",
+          note: "Keeps the emotional color of your taste but widens the room with related scenes, radio sets, and deeper cuts.",
+          query: `${secondary} radio mix deep cuts`
+        }
+      ];
+
+      comfortEl.innerHTML = playlists.map(item => `
+        <article class="panel playlist">
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.note}</p>
+          </div>
+          <div class="search-term">${item.query}</div>
+          <div class="link-row">${makeLinks(item.query, platforms)}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderPlan() {
+      const mood = moodInput.value;
+      const platforms = selectedPlatforms();
+      const safePlatforms = platforms.length ? platforms : ["YouTube"];
+      const pool = artistPool[mood];
+      const terms = tasteTerms();
+      const tasteLine = terms.length ? terms.slice(0, 5).join(", ") : "your current favorites";
+
+      renderTags();
+      renderComfort(safePlatforms);
+      platformCountEl.textContent = safePlatforms.length;
+      modeBadge.textContent = `${moodInput.options[moodInput.selectedIndex].text.split(":")[0]} route`;
+
+      weeksEl.innerHTML = [0, 1, 2, 3].map(weekIndex => {
+        const picks = pool.slice(weekIndex * 3, weekIndex * 3 + 3);
+        return `
+          <article class="week">
+            <div class="week-label">
+              <span>Week</span>
+              <strong>${weekIndex + 1}</strong>
+            </div>
+            <div class="artists">
+              ${picks.map(([name, note], index) => {
+                const query = `${name} ${tasteLine} best songs live set`;
+                return `
+                  <div class="artist">
+                    <div class="artist-top">
+                      <h3>${name}</h3>
+                      <div class="platform-dot" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                      </div>
+                    </div>
+                    <p>${note}</p>
+                    <div class="search-term">${query}</div>
+                    <div class="link-row">${makeLinks(query, safePlatforms)}</div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function planText() {
+      const mood = moodInput.options[moodInput.selectedIndex].text;
+      const platforms = selectedPlatforms().join(", ") || "YouTube";
+      const terms = tasteTerms().join(", ") || "current favorites";
+      const artists = [...document.querySelectorAll(".artist")].map(card => {
+        const name = card.querySelector("h3").textContent;
+        const note = card.querySelector("p").textContent;
+        const query = card.querySelector(".search-term").textContent;
+        return `- ${name}: ${note}\n  Search: ${query}`;
+      });
+
+      const weeks = [0, 1, 2, 3].map(i => `Week ${i + 1}\n${artists.slice(i * 3, i * 3 + 3).join("\n")}`).join("\n\n");
+      return `Personal A&R Listening Plan\nTaste: ${terms}\nMode: ${mood}\nPlatforms: ${platforms}\n\nComfort playlists:\n1. ${document.querySelectorAll(".playlist .search-term")[0].textContent}\n2. ${document.querySelectorAll(".playlist .search-term")[1].textContent}\n\n${weeks}\n\nFeedback question: What hit, what missed, and what should I refine next week?`;
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", renderPlan);
+    document.getElementById("songBtn").addEventListener("click", renderSongSearch);
+    songInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") renderSongSearch();
+    });
+    tasteInput.addEventListener("input", renderTags);
+    moodInput.addEventListener("change", renderPlan);
+    document.querySelectorAll(".platforms input").forEach(input => input.addEventListener("change", renderPlan));
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(planText());
+      document.getElementById("copyBtn").title = "Copied";
+      setTimeout(() => document.getElementById("copyBtn").title = "Copy plan", 1200);
+    });
+
+    document.getElementById("feedbackBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText("Here is my feedback: favorite artist was __, least favorite was __, song I replayed was __. Refine next week's plan with more/less __.");
+      document.getElementById("feedbackBtn").textContent = "Copied";
+      setTimeout(() => document.getElementById("feedbackBtn").textContent = "Copy feedback prompt", 1200);
+    });
+
+    renderPlan();
+    renderSongSearch();
+  </script>
+</body>
+</html>
