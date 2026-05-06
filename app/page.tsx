@@ -33,6 +33,12 @@ export default function LandingPage() {
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
               <SpotifyButton />
+              <a
+                href="/dashboard?demo=1"
+                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
+              >
+                View demo dashboard
+              </a>
               <p className="text-sm text-white/45">Uses Spotify Authorization Code Flow. No OpenAI call yet.</p>
             </div>
           </div>

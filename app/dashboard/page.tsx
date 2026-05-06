@@ -6,13 +6,20 @@ import { SpotifyButton } from "@/components/SpotifyButton";
 import { StatCard } from "@/components/StatCard";
 import { TrackList } from "@/components/TrackList";
 import { generateMusicProfile } from "@/lib/musicAnalysis";
+import { mockSpotifyData } from "@/lib/mockSpotify";
 import { fetchSpotifyTasteData } from "@/lib/spotify";
 import { cookies } from "next/headers";
 
-export default async function DashboardPage() {
+type DashboardPageProps = {
+  searchParams: Promise<{ demo?: string }>;
+};
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
+  const { demo } = await searchParams;
+  const isDemo = demo === "1";
   const accessToken = (await cookies()).get("spotify_access_token")?.value;
 
-  if (!accessToken) {
+  if (!accessToken && !isDemo) {
     return (
       <main className="aurora grid min-h-screen place-items-center px-5">
         <section className="glass max-w-xl rounded-[32px] p-8 text-center">
@@ -29,7 +36,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const data = await fetchSpotifyTasteData(accessToken);
+  const data = isDemo ? mockSpotifyData : await fetchSpotifyTasteData(accessToken as string);
   const profile = generateMusicProfile(data);
 
   return (
@@ -38,7 +45,9 @@ export default async function DashboardPage() {
         <header className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.32em] text-[#1DB954]">Spotify taste profile</p>
-            <h1 className="mt-3 text-3xl font-black text-white md:text-5xl">Your listening signal</h1>
+            <h1 className="mt-3 text-3xl font-black text-white md:text-5xl">
+              {isDemo ? "Demo listening signal" : "Your listening signal"}
+            </h1>
           </div>
           {data.currentlyPlaying ? (
             <a
