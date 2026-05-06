@@ -1,5 +1,8 @@
-node_modules
-.next
-out
-.env.local
+/node_modules
+/.next
+/out
+/build
+.env*.local
+!.env.local.example
+.vercel
 *.log
